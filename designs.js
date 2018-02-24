@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
   // Select size input
-  let table = $('#pixel_canvas'),
+  var table = $('#pixel_canvas'),
     grid = "";
 
   // Reset table
@@ -48,30 +48,35 @@ $(document).ready(function() {
   }
 
   // function to enabling reset button and disabling submit button
-  function switchedBtn() {
+  function switchBtn() {
     $("input:submit").attr("disabled", true);
     $("input:reset").attr("disabled", false);
   }
 
-  // When size is submitted by the user, call makeGrid()
+  function colorCell(target) {
+    // Select color input
+    let color = $('#colorPicker').val();
+    $(target).css('background-color', color);
+  }
+
+  function clearCell(target) {
+    $(target).css('background-color', '');
+  }
+
+  // submit listener
   $('input:submit').click(function(e) {
     e.preventDefault();
-    switchedBtn()
+    switchBtn()
     makeGrid();
 
     // Colorize cell
-    $("td").click(function() {
-      // Select color input
-      let color = $('#colorPicker').val(),
-        current = $(this).css('background-color');
+    table.on('mousedown', 'td', function() {
+      colorCell(this);
+    });
 
-      $(this).css('background-color', color);
-      if (current === $(this).css('background-color')) {
-        $(this).css('background-color', '#fff');
-      }
-    }); // end td click listener
-
-
+    table.on('dblclick', 'td', function() {
+      clearCell(this);
+    })
   }); // end submit's listener
 
   // clear table
